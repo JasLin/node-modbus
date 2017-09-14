@@ -83,10 +83,12 @@ module.exports = stampit()
       this.log.debug('received data')
       /**
        * handle heartBeat package
+       * just emit heartBeat event to application , then return
        */
       if(heartBeat.equals(data)) {
         this.emit('heartBeat', data)
         this.log.debug(`received heartBeat : ${data.toString('hex')}`)
+        return
       }
       buffer = Buffer.concat([buffer, data])
 
