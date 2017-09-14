@@ -1,6 +1,7 @@
 'use strict'
 
 var stampit = require('stampit')
+var heartBeat = Buffer.from([0xfe]) //TODO: from config 
 
 module.exports = stampit()
   .init(function () {
@@ -80,7 +81,13 @@ module.exports = stampit()
 
     var onSocketData = function (data) {
       this.log.debug('received data')
-
+      /**
+       * handle heartBeat package
+       */
+      if(heartBeat.equals(data)) {
+        this.emit('heartBeat', data)
+        this.log.debug(`received heartBeat : ${data.toString('hex')}`)
+      }
       buffer = Buffer.concat([buffer, data])
 
       while (buffer.length > 7) {
